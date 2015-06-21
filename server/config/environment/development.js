@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/nightlife-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };
