@@ -60,13 +60,23 @@ exports.destroy = function(req, res) {
 exports.search = function(req, res) {
 
 
-  yelp.search({term: "food", location: "Montreal"}, function(error, data) {
-    //console.log(error);
-    //console.log(data);
+  /*yelp.search({term: "bar", location: req.params.location}, function(err, data) {
+    if (err) { return handleError(res, err) };
+    
     res.json({ message: data });
+  });*/
+
+  // testing
+  var fs = require('fs');
+  var file = __dirname + '/example.json';
+
+  fs.readFile(file, 'utf8', function (err, data) {
+    if (err) { return handleError(res, err) };
+
+    data = JSON.parse(data);
+
+    res.json(data);
   });
-
-
   
 };
 
