@@ -2,6 +2,8 @@
 
 var _ = require('lodash');
 var Bar = require('./bar.model');
+//var yelp = require('yelp');
+var yelp = require('../../config/yelp_config');
 
 // Get list of bars
 exports.index = function(req, res) {
@@ -52,6 +54,20 @@ exports.destroy = function(req, res) {
       return res.send(204);
     });
   });
+};
+
+// Searches for Bars using Yelp API
+exports.search = function(req, res) {
+
+
+  yelp.search({term: "food", location: "Montreal"}, function(error, data) {
+    //console.log(error);
+    //console.log(data);
+    res.json({ message: data });
+  });
+
+
+  
 };
 
 function handleError(res, err) {
