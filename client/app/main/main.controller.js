@@ -10,7 +10,7 @@ angular.module('nightlifeApp')
 
 			$http.get('/api/bars/search/' + $scope.input_location)
 				.success(function(data) {
-					console.log(data.message.businesses[0]);
+					//console.log(data.message.businesses[0]);
 					$scope.bars = data.message.businesses.map(function(business, index) {
 						return {
 							name: business.name,
@@ -35,34 +35,53 @@ angular.module('nightlifeApp')
 		      controller: 'ModalInstanceCtrl'
 		    });
 		} else {
-			if(false) {
-				$http.post('/api/bars/', {
-					name: $scope.bars[id].name,
-					users: [Auth.getCurrentUser()]
-				}).success(function(data) {
-					console.log(data);
-				});
-			}
-			
-			$http.get('/api/bars/').success(function(dbBars) {
-				//console.log(dbBars);
-				var barId = false;
-				dbBars.forEach(function(dbBar, index) {
-					if (dbBar.name === $scope.bars[id].name) {
-						barId = dbBar._id;
+			var user = Auth.getCurrentUser();
+			if (true) {
+				$http.get('/api/bars/').success(function(dbBars) {
+
+					// find if bar exists
+					var foundBar = false;
+					dbBars.forEach(function(dbBar, index) {
+						if (dbBar.name === $scope.bars[id].name) {
+							foundBar = dbBar;
+						}
+					});
+					
+					// if bar exists update users
+					if (foundBar !== false) {
+
+						var userExists = false;
+						// find if user exists in bar
+						foundBar.users.forEach(function(u) {
+							if (u.email === user.email) {
+								userExists = true;
+							}
+						});
+
+						if (userExists === false) {
+							foundBar.users.push(user);
+							$http.put('/api/bars/' + foundBar._id, foundBar)
+								.success(function(data) {
+								console.log('new user');
+							}).error(function(err) {
+								console.log('error: ', err);
+							});
+						} else {
+							console.log('user exists');
+						}
+					}
+
+					// if not make a new bar
+					else {
+						$http.post('/api/bars/', {
+							name: $scope.bars[id].name,
+							users: [user]
+						}).success(function(data) {
+							console.log('new bar');
+						});
 					}
 				});
-				
-				if (barId !== false) {
-					$http.put('/api/bars/' + barId, {
-						
-					}).success(function(data) {
-						console.log('success: ', data);
-					}).error(function(err) {
-						console.log('error: ', err);
-					});
-				}
-			});
+			}
 		}
 	};
 
