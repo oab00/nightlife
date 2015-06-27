@@ -26,8 +26,19 @@ angular.module('nightlifeApp')
 
 	$scope.updateGoing = function() {
 		$http.get('/api/bars/').success(function(dbBars) {
-			console.log(dbBars);
-			console.log($scope.bars);
+
+			$scope.bars.forEach(function(bar) {
+				var barIndex = dbBars.map(function(mapped) {
+					return mapped.name;
+				}).indexOf(bar.name);
+
+				// for each bar in the database bars
+				if (barIndex !== -1) {
+					
+					// update going :)
+
+				}
+			});
 		});
 	};
 
