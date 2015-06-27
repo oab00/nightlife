@@ -38,3 +38,9 @@
 .main .bar div:nth-child(3) {
 	width: 80px;
 }
+
+
+/* modal */
+.modal-header, .modal-footer {
+	background-color: lightblue;
+}

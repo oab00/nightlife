@@ -9,7 +9,7 @@
 	<div class="bars">
 		<div class="bar" ng-repeat="bar in bars">
 			<div>
-				<button class="btn btn-primary" title="add me to bar">+</button>
+				<button class="btn btn-primary" title="add me to bar" ng-click="addMe(bar.id)">+</button>
 			</div>
 			<div>
 				<a target="_blank" ng-href="{{bar.url}}">{{ bar.name }}</a>
@@ -19,4 +19,18 @@
 			</div>
 		</div>
 	</div>
+
+	<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            
+        </div>
+        <div class="modal-body">
+            <h1>Oops. You forgot to login.</h1>
+        </div>
+        <div class="modal-footer">
+        	<button class="btn btn-primary" ng-click="signUp()">Sign Up</button>
+            <button class="btn btn-success" ng-click="login()">Login</button>
+            <button class="btn btn-info" ng-click="twitterLogin()">Twitter Login</button>
+        </div>
+    </script>
 </div>

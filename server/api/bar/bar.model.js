@@ -5,8 +5,7 @@ var mongoose = require('mongoose'),
 
 var BarSchema = new Schema({
   name: String,
-  info: String,
-  active: Boolean
+  users: Array
 });
 
 module.exports = mongoose.model('Bar', BarSchema);
