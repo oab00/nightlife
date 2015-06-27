@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var BarSchema = new Schema({
   name: String,
+  city: String,
   users: Array
 });
 

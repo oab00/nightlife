@@ -12,10 +12,10 @@ angular.module('nightlifeApp')
 
 			$http.get('/api/bars/search/' + $scope.input_location)
 				.success(function(data) {
-					//console.log(data.message.businesses[0]);
 					$scope.bars = data.message.businesses.map(function(business, index) {
 						return {
 							name: business.name,
+							city: business.location.city,
 							url: business.url,
 							id: index,
 							userIsGoing: false,
@@ -99,13 +99,8 @@ angular.module('nightlifeApp')
 						foundBar.users.push(user);
 						$http.put('/api/bars/' + foundBar._id, foundBar)
 							.success(function(data) {
-								console.log('new user');
 								$scope.updateGoing();
-						}).error(function(err) {
-							console.log('error: ', err);
 						});
-					} else {
-						console.log('user exists');
 					}
 				}
 
@@ -113,9 +108,9 @@ angular.module('nightlifeApp')
 				else {
 					$http.post('/api/bars/', {
 						name: $scope.bars[id].name,
+						city: $scope.bars[id].city,
 						users: [user]
 					}).success(function(data) {
-						console.log('new bar');
 						$scope.updateGoing();
 					});
 				}
@@ -133,13 +128,8 @@ angular.module('nightlifeApp')
 			
 			$http.put('/api/bars/' + dbBar._id, dbBar)
 				.success(function(data) {
-					console.log('removed user');
 					$scope.updateGoing();
-			}).error(function(err) {
-				console.log('error: ', err);
-			});
-
-
+			})
 		});
 
 		$scope.updateGoing();
