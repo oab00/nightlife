@@ -4,12 +4,18 @@
 	<form ng-submit="search()">
 		<label>Where are you?<input type="text" class="form-control" ng-model="input_location"></label>
 		<button class="btn btn-primary">Search</button>
+		<button class="btn btn-warning" ng-click="updateGoing()">زبدة</button>
 	</form>
 
 	<div class="bars">
 		<div class="bar" ng-repeat="bar in bars">
 			<div>
-				<button class="btn btn-primary" title="add me to bar" ng-click="addMe(bar.id)">+</button>
+				<button class="btn btn-primary" title="add me to bar" ng-click="addMe(bar.id)" ng-hide="userIsGoing">
+					<i class="fa fa-plus"></i>
+				</button>
+				<button class="btn btn-danger" title="remove me" ng-click="removeMe(bar.id)" ng-show="userIsGoing">
+					<i class="fa fa-minus"></i>
+				</button>
 			</div>
 			<div>
 				<a target="_blank" ng-href="{{bar.url}}">{{ bar.name }}</a>

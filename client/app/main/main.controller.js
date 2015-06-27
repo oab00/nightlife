@@ -15,25 +15,37 @@ angular.module('nightlifeApp')
 						return {
 							name: business.name,
 							url: business.url,
-							id: index
+							id: index,
+							userIsGoing: false,
+							usersList: []
 						};
 					});
 				});
 		}
 	};
 
+	$scope.updateGoing = function() {
+		$http.get('/api/bars/').success(function(dbBars) {
+			console.log(dbBars);
+			console.log($scope.bars);
+		});
+	};
+
 
 	$scope.input_location = 'montreal';
 	$scope.search();
 
-	// modal
+	
 	$scope.addMe = function (id) {
+		// if user not logged in
 		if (!Auth.isLoggedIn()) {
 		    var modalInstance = $modal.open({
 		      animation: $scope.animationsEnabled,
 		      templateUrl: 'myModalContent.html',
 		      controller: 'ModalInstanceCtrl'
 		    });
+
+		// if logged in assign user to bar
 		} else {
 			var user = Auth.getCurrentUser();
 			if (true) {
@@ -83,6 +95,10 @@ angular.module('nightlifeApp')
 				});
 			}
 		}
+	};
+
+	$scope.removeMe = function(id) {
+
 	};
 
 	
