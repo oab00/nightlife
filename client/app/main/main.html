@@ -1,8 +1,12 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
  
-<div class="container">
-  <label>Where are you? <input type="text" class="form-control"></label>
-  <button class="btn btn-primary">Search</button>
+<div class="container main">
+  <label>Where are you?<input type="text" class="form-control" ng-model="input_location"></label>
+  <button class="btn btn-primary" ng-click="search()">Search</button>
 
-  <div id="map-canvas"></div>
+  <div class="bars">
+  	<div class="bar" ng-repeat="bar in bars">
+  		<p>{{ bar.name }}</p>
+  	</div>
+  </div>
 </div>
