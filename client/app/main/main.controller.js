@@ -2,8 +2,6 @@
 
 angular.module('nightlifeApp')
 .controller('MainCtrl', function ($scope, $http) {
-
-	$scope.input_location = 'montreal';
 	
 	$scope.search = function() {
 		if ($scope.input_location) {
@@ -13,10 +11,14 @@ angular.module('nightlifeApp')
 			$http.get('/api/bars/search/' + $scope.input_location)
 				.success(function(data) {
 					$scope.bars = data.message.businesses;
-					//console.log(data.message.businesses);
+					console.log(data.message.businesses[0]);
 				});
 		}
 	};
+
+
+	$scope.input_location = 'montreal';
+	$scope.search();
 
 
 

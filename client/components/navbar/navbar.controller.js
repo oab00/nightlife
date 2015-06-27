@@ -3,7 +3,7 @@
 angular.module('nightlifeApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': 'Search',
       'link': '/'
     }];
 

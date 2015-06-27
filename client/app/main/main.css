@@ -1,3 +1,40 @@
 .container.main {
 	text-align: center;
 }
+
+.main .bars {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 500px;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.main .bar {
+	border: 1px solid gray;
+	background-color: rgba(0, 0, 0, 0.1);
+	margin: 10px;
+}
+
+.main .bar:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.main .bar div {
+	display: inline-block;
+	padding: 20px 0;
+}
+
+.main .bar div:nth-child(1) {
+	width: 60px;
+}
+
+.main .bar div:nth-child(2) {
+	text-align: left;
+	font-size: 20px;
+	padding-left: 10px;
+	width: 300px;
+}
+
+.main .bar div:nth-child(3) {
+	width: 80px;
+}
