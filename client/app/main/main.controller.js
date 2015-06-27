@@ -20,6 +20,7 @@ angular.module('nightlifeApp')
 							usersList: []
 						};
 					});
+					$scope.updateGoing();
 				});
 		}
 	};
@@ -35,7 +36,18 @@ angular.module('nightlifeApp')
 				// for each bar in the database bars
 				if (barIndex !== -1) {
 					
-					// update going :)
+					//console.log(bar.name, dbBars[barIndex].name);
+					var user = Auth.getCurrentUser();
+
+					bar.usersList = dbBars[barIndex].users;
+
+					bar.userIsGoing = false;
+					bar.usersList.forEach(function(u) {
+						if (u.email === user.email) {
+							console.log(u.email + ' equals!');
+							bar.userIsGoing = true;
+						}
+					});
 
 				}
 			});
@@ -81,11 +93,13 @@ angular.module('nightlifeApp')
 							}
 						});
 
+						// include user
 						if (userExists === false) {
 							foundBar.users.push(user);
 							$http.put('/api/bars/' + foundBar._id, foundBar)
 								.success(function(data) {
 								console.log('new user');
+								$scope.updateGoing();
 							}).error(function(err) {
 								console.log('error: ', err);
 							});
@@ -94,13 +108,14 @@ angular.module('nightlifeApp')
 						}
 					}
 
-					// if not make a new bar
+					// if not make a new bar and include user
 					else {
 						$http.post('/api/bars/', {
 							name: $scope.bars[id].name,
 							users: [user]
 						}).success(function(data) {
 							console.log('new bar');
+							$scope.updateGoing();
 						});
 					}
 				});
@@ -109,7 +124,7 @@ angular.module('nightlifeApp')
 	};
 
 	$scope.removeMe = function(id) {
-
+		$scope.updateGoing();
 	};
 
 	
