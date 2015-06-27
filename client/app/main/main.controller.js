@@ -13,7 +13,7 @@ angular.module('nightlifeApp')
 			$http.get('/api/bars/search/' + $scope.input_location)
 				.success(function(data) {
 					$scope.bars = data.message.businesses;
-					console.log(data.message.businesses);
+					//console.log(data.message.businesses);
 				});
 		}
 	};

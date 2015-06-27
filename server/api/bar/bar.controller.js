@@ -59,12 +59,15 @@ exports.destroy = function(req, res) {
 // Searches for Bars using Yelp API
 exports.search = function(req, res) {
 
-
-  /*yelp.search({term: "bar", location: req.params.location}, function(err, data) {
-    if (err) { return handleError(res, err) };
+  if (req.params.location !== 'montreal') {
+    yelp.search({term: "bar", location: req.params.location}, function(err, data) {
+      if (err) { return handleError(res, err) };
+      
+      res.json({ message: data });
+    });
     
-    res.json({ message: data });
-  });*/
+    return;
+  }
 
   // testing
   var fs = require('fs');
