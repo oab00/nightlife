@@ -2,6 +2,8 @@
 
 angular.module('nightlifeApp')
 .controller('MainCtrl', function ($scope, $http, $modal, Auth) {
+
+	var user = Auth.getCurrentUser();
 	
 	$scope.search = function() {
 		if ($scope.input_location) {
@@ -17,7 +19,9 @@ angular.module('nightlifeApp')
 							url: business.url,
 							id: index,
 							userIsGoing: false,
-							usersList: []
+							usersList: [],
+							dbIndex: undefined,
+							dbId: undefined
 						};
 					});
 					$scope.updateGoing();
@@ -35,19 +39,18 @@ angular.module('nightlifeApp')
 
 				// for each bar in the database bars
 				if (barIndex !== -1) {
-					
-					//console.log(bar.name, dbBars[barIndex].name);
-					var user = Auth.getCurrentUser();
 
 					bar.usersList = dbBars[barIndex].users;
 
 					bar.userIsGoing = false;
 					bar.usersList.forEach(function(u) {
 						if (u.email === user.email) {
-							console.log(u.email + ' equals!');
 							bar.userIsGoing = true;
 						}
 					});
+
+					bar.dbIndex = barIndex;
+					bar.dbId = dbBars[barIndex]._id;
 
 				}
 			});
@@ -70,60 +73,75 @@ angular.module('nightlifeApp')
 
 		// if logged in assign user to bar
 		} else {
-			var user = Auth.getCurrentUser();
-			if (true) {
-				$http.get('/api/bars/').success(function(dbBars) {
+			$http.get('/api/bars/').success(function(dbBars) {
 
-					// find if bar exists
-					var foundBar = false;
-					dbBars.forEach(function(dbBar, index) {
-						if (dbBar.name === $scope.bars[id].name) {
-							foundBar = dbBar;
-						}
-					});
-					
-					// if bar exists update users
-					if (foundBar !== false) {
-
-						var userExists = false;
-						// find if user exists in bar
-						foundBar.users.forEach(function(u) {
-							if (u.email === user.email) {
-								userExists = true;
-							}
-						});
-
-						// include user
-						if (userExists === false) {
-							foundBar.users.push(user);
-							$http.put('/api/bars/' + foundBar._id, foundBar)
-								.success(function(data) {
-								console.log('new user');
-								$scope.updateGoing();
-							}).error(function(err) {
-								console.log('error: ', err);
-							});
-						} else {
-							console.log('user exists');
-						}
-					}
-
-					// if not make a new bar and include user
-					else {
-						$http.post('/api/bars/', {
-							name: $scope.bars[id].name,
-							users: [user]
-						}).success(function(data) {
-							console.log('new bar');
-							$scope.updateGoing();
-						});
+				// find if bar exists
+				var foundBar = false;
+				dbBars.forEach(function(dbBar, index) {
+					if (dbBar.name === $scope.bars[id].name) {
+						foundBar = dbBar;
 					}
 				});
-			}
+					
+				// if bar exists update users
+				if (foundBar !== false) {
+
+					var userExists = false;
+					// find if user exists in bar
+					foundBar.users.forEach(function(u) {
+						if (u.email === user.email) {
+							userExists = true;
+						}
+					});
+
+					// include user
+					if (userExists === false) {
+						foundBar.users.push(user);
+						$http.put('/api/bars/' + foundBar._id, foundBar)
+							.success(function(data) {
+								console.log('new user');
+								$scope.updateGoing();
+						}).error(function(err) {
+							console.log('error: ', err);
+						});
+					} else {
+						console.log('user exists');
+					}
+				}
+
+				// if not make a new bar and include user
+				else {
+					$http.post('/api/bars/', {
+						name: $scope.bars[id].name,
+						users: [user]
+					}).success(function(data) {
+						console.log('new bar');
+						$scope.updateGoing();
+					});
+				}
+			});
 		}
 	};
 
 	$scope.removeMe = function(id) {
+
+		$http.get('/api/bars/' + $scope.bars[id].dbId).success(function(dbBar) {
+
+			var removeIndex = dbBar.users.map(function(u) { return u.email }).indexOf(user.email);
+
+			dbBar.users.splice(removeIndex, 1);
+			
+			$http.put('/api/bars/' + dbBar._id, dbBar)
+				.success(function(data) {
+					console.log('removed user');
+					$scope.updateGoing();
+			}).error(function(err) {
+				console.log('error: ', err);
+			});
+
+
+		});
+
 		$scope.updateGoing();
 	};
 
