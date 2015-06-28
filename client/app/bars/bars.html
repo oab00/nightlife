@@ -1,0 +1,23 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container bars-container">
+	<div class="bars">
+		<div class="bar" ng-repeat="bar in bars">
+			<div>
+				<h4>
+					{{ bar.city }} - 
+					<a target="_blank" ng-href="{{bar.url}}">{{ bar.name }}</a>
+				</h4>
+			</div>
+			<div>
+				Users Going:
+				<ul>
+					<li class="user" ng-repeat="user in bar.users">
+						<strong>{{ user.name }}</strong> ({{ user.email }})
+					</li>
+				</ul>
+			</div>
+			<hr />
+		</div>
+	</div>
+</div>

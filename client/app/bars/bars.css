@@ -1,0 +1,9 @@
+.bars-container {
+	text-align: center;
+}
+
+.bars-container .bars {
+	width: 500px;
+	text-align: left;
+	display: inline-block;
+}

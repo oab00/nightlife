@@ -5,6 +5,9 @@ angular.module('nightlifeApp')
     $scope.menu = [{
       'title': 'Search',
       'link': '/'
+    },{
+      'title': 'Bars',
+      'link': '/bars'
     }];
 
     $scope.isCollapsed = true;

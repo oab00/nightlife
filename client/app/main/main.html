@@ -6,9 +6,16 @@
 		<button class="btn btn-primary">Search</button>
 	</form>
 
+	<div class="loading" ng-show="loading">
+		<h2>Loading...</h2>
+	</div>
+
+	<div class="not-found" ng-show="notFound">
+		<h2>Not Found</h2>
+	</div>
 
 	<div class="bars">
-		<div class="bar" ng-repeat="bar in bars">
+		<div class="bar" ng-repeat="bar in bars" ng-hide="notFound">
 			<div>
 				<button class="btn btn-primary" title="add me to bar" ng-click="addMe(bar.id)" ng-hide="bar.userIsGoing">
 					<i class="fa fa-plus"></i>
@@ -36,7 +43,7 @@
         <div class="modal-footer">
         	<button class="btn btn-primary" ng-click="signUp()">Sign Up</button>
             <button class="btn btn-success" ng-click="login()">Login</button>
-            <button class="btn btn-info" ng-click="twitterLogin()">Twitter Login</button>
+            <!--<button class="btn btn-info" ng-click="twitterLogin()">Twitter Login</button>-->
         </div>
     </script>
 </div>

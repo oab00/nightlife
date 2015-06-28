@@ -6,9 +6,14 @@ angular.module('nightlifeApp')
 	var user = Auth.getCurrentUser();
 	
 	$scope.search = function() {
+		
 		if ($scope.input_location) {
 			// remove everything except letters, spaces and dashes
 			$scope.input_location = $scope.input_location.replace(/[^\w -]?[\d]?/g, '');
+
+			$scope.loading = true;
+
+			localStorage.setItem("location", $scope.input_location);
 
 			$http.get('/api/bars/search/' + $scope.input_location)
 				.success(function(data) {
@@ -25,9 +30,19 @@ angular.module('nightlifeApp')
 						};
 					});
 					$scope.updateGoing();
+					$scope.notFound = false;
+					$scope.loading = false;
+				}).error(function(data) {
+					$scope.notFound = true;
+					$scope.loading = false;
 				});
 		}
 	};
+
+	if (localStorage.getItem("location")) {
+		$scope.input_location = localStorage.getItem("location");
+		$scope.search();
+	}
 
 	$scope.updateGoing = function() {
 		$http.get('/api/bars/').success(function(dbBars) {
@@ -58,8 +73,8 @@ angular.module('nightlifeApp')
 	};
 
 
-	$scope.input_location = 'montreal';
-	$scope.search();
+	//$scope.input_location = 'montreal';
+	//$scope.search();
 
 	
 	$scope.addMe = function (id) {
@@ -109,6 +124,7 @@ angular.module('nightlifeApp')
 					$http.post('/api/bars/', {
 						name: $scope.bars[id].name,
 						city: $scope.bars[id].city,
+						url: $scope.bars[id].url,
 						users: [user]
 					}).success(function(data) {
 						$scope.updateGoing();
@@ -151,6 +167,7 @@ angular.module('nightlifeApp').controller('ModalInstanceCtrl', function ($scope,
     $modalInstance.close();
   };
 
+  // TODO: twitter login
   $scope.twitterLogin = function () {
     //$location.path('/');
     $modalInstance.close();
