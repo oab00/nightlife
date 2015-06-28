@@ -7,15 +7,15 @@ angular.module('nightlifeApp')
 	
 	$scope.search = function() {
 		
-		if ($scope.input_location) {
+		if ($scope.inputLocation) {
 			// remove everything except letters, spaces and dashes
-			$scope.input_location = $scope.input_location.replace(/[^\w -]?[\d]?/g, '');
+			$scope.inputLocation = $scope.inputLocation.replace(/[^\w -]?[\d]?/g, '');
 
 			$scope.loading = true;
 
-			localStorage.setItem("location", $scope.input_location);
+			localStorage.setItem('location', $scope.inputLocation);
 
-			$http.get('/api/bars/search/' + $scope.input_location)
+			$http.get('/api/bars/search/' + $scope.inputLocation)
 				.success(function(data) {
 					$scope.bars = data.message.businesses.map(function(business, index) {
 						return {
@@ -32,17 +32,13 @@ angular.module('nightlifeApp')
 					$scope.updateGoing();
 					$scope.notFound = false;
 					$scope.loading = false;
-				}).error(function(data) {
+				}).error(function() {
 					$scope.notFound = true;
 					$scope.loading = false;
 				});
 		}
 	};
 
-	if (localStorage.getItem("location")) {
-		$scope.input_location = localStorage.getItem("location");
-		$scope.search();
-	}
 
 	$scope.updateGoing = function() {
 		$http.get('/api/bars/').success(function(dbBars) {
@@ -73,14 +69,14 @@ angular.module('nightlifeApp')
 	};
 
 
-	//$scope.input_location = 'montreal';
+	//$scope.inputLocation = 'montreal';
 	//$scope.search();
 
 	
 	$scope.addMe = function (id) {
 		// if user not logged in
 		if (!Auth.isLoggedIn()) {
-		    var modalInstance = $modal.open({
+		    $modal.open({
 		      animation: $scope.animationsEnabled,
 		      templateUrl: 'myModalContent.html',
 		      controller: 'ModalInstanceCtrl'
@@ -92,7 +88,7 @@ angular.module('nightlifeApp')
 
 				// find if bar exists
 				var foundBar = false;
-				dbBars.forEach(function(dbBar, index) {
+				dbBars.forEach(function(dbBar) {
 					if (dbBar.name === $scope.bars[id].name) {
 						foundBar = dbBar;
 					}
@@ -113,7 +109,7 @@ angular.module('nightlifeApp')
 					if (userExists === false) {
 						foundBar.users.push(user);
 						$http.put('/api/bars/' + foundBar._id, foundBar)
-							.success(function(data) {
+							.success(function() {
 								$scope.updateGoing();
 						});
 					}
@@ -126,7 +122,7 @@ angular.module('nightlifeApp')
 						city: $scope.bars[id].city,
 						url: $scope.bars[id].url,
 						users: [user]
-					}).success(function(data) {
+					}).success(function() {
 						$scope.updateGoing();
 					});
 				}
@@ -138,20 +134,28 @@ angular.module('nightlifeApp')
 
 		$http.get('/api/bars/' + $scope.bars[id].dbId).success(function(dbBar) {
 
-			var removeIndex = dbBar.users.map(function(u) { return u.email }).indexOf(user.email);
+			var removeIndex = dbBar.users.map(function(u) { return u.email; }).indexOf(user.email);
 
 			dbBar.users.splice(removeIndex, 1);
 			
 			$http.put('/api/bars/' + dbBar._id, dbBar)
-				.success(function(data) {
+				.success(function() {
 					$scope.updateGoing();
-			})
+			});
 		});
 
 		$scope.updateGoing();
 	};
 
+
+	function startUp() {
+		if (localStorage.getItem('location')) {
+			$scope.inputLocation = localStorage.getItem('location');
+			$scope.search();
+		}
+	}
 	
+	setTimeout(startUp, 1000);
 
 });
 
