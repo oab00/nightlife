@@ -7,7 +7,6 @@ angular.module('nightlifeApp')
 
   		$scope.bars = dbBars;
   		
-  		console.log(dbBars);
   	});
 
   });
